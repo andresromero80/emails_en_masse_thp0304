@@ -46,9 +46,10 @@ class GetEmails
     def get_all_the_emails (array)
     	liste_emails = Array.new
     	array.length.times do |i|
-            #puts i
+            puts "Scrapping #{i}/#{array.length} emails ..."
             get_the_email_of_a_townhal_from_its_webpage(array[i])
     		liste_emails[i] = get_the_email_of_a_townhal_from_its_webpage(array[i])
+            system("clear")
             rescue #error opening the URL
                 liste_emails[i] = nil
     	end 
@@ -75,6 +76,6 @@ end
 
 # GetEmails.new(url_link).create_list
 
-binding.pry
+# binding.pry
 
 
