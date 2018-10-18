@@ -1,5 +1,6 @@
 $:.unshift File.expand_path("./../../app/", __FILE__)
 require 'townhalls_adder_to_db.rb'
+require 'townhalls_mailer.rb'
 
 class Index
 	attr_accessor :db_manager, :follower_manager, :mailer_manager, :scrapping_manager
@@ -7,7 +8,7 @@ class Index
 	def initialize()
 		@db_manager = DBManager.new
 		# @follower_manager = FollowerManager.new
-		# @mailer_manager = MailerManager.new
+		@mailer_manager = MailerManager.new
 		# @scrapping_manager = ScrappingManager.new
 	end
 
@@ -30,6 +31,9 @@ class Index
 	end
 
 	def call_mailer
+		
+		@mailer_manager.envoi_mail
+		
 
 	end
 

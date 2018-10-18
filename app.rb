@@ -5,3 +5,4 @@ require 'index.rb'
 
 index = Index.new
 index.start
+index.call_mailer
