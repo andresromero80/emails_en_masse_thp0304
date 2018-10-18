@@ -5,7 +5,7 @@ require 'pry'
 
 #url_link = "http://www.annuaire-des-mairies.com/vienne.html"
 
-class GetEmails
+class ScrappingManager
 
     attr_accessor :url_obj, :array_info, :data
 

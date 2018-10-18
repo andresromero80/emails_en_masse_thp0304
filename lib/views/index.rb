@@ -48,12 +48,13 @@ class Index
 
 	def call_follower
 		email = @db_manager.get_city_names
-		@follower_manager.push_json(email)
+		@follower_manager.run(email)
 	end
 
 	def call_mailer
 		
-		@mailer_manager.envoi_mail
+		array_mails = @db_manager.get_emails
+		@mailer_manager.envoi_mail(array_mails)
 		
 
 	end
