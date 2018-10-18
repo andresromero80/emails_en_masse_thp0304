@@ -3,14 +3,14 @@ require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
-url_link = "http://www.annuaire-des-mairies.com/vienne.html"
-
-# "http://annuaire-des-mairies.com/val-d-oise.html"
+#url_link = "http://www.annuaire-des-mairies.com/vienne.html"
 
 class GetEmails
 
-    def initialize (urlstring)
-      @url_obj = urlstring
+    attr_accessor :url_obj, :array_info, :data
+
+    def initialize ()
+      @url_obj = " "
       @array_info = Array.new
     end 
 
@@ -46,7 +46,7 @@ class GetEmails
     def get_all_the_emails (array)
     	liste_emails = Array.new
     	array.length.times do |i|
-            puts "Scrapping #{i}/#{array.length} emails ..."
+            puts "Scrapping #{i}/#{array.length} emails de #{@url_obj.split("/")[-1]}..."
             get_the_email_of_a_townhal_from_its_webpage(array[i])
     		liste_emails[i] = get_the_email_of_a_townhal_from_its_webpage(array[i])
             system("clear")
@@ -59,17 +59,38 @@ class GetEmails
     end 
 
     #Method that creates a hash ville => email
-    def create_list
+    def create_list(urlstring)
+        @url_obj = urlstring
         villes = self.get_all_names(@url_obj)
         emails = self.get_all_the_emails(self.get_all_the_urls_of_val_doise_townhalls(@url_obj))
-      # self.get_all_names(@url_obj).zip(self.get_all_the_emails(self.get_all_the_urls_of_val_doise_townhalls(@url_obj))).to_h
-        villes.length.times do |i|
-        list_hash = {:name => villes[i], :email => emails[i]}
-        
-        @array_info.push(list_hash)
+        dep = @url_obj.split("/")[-1]
+        nom_dep = dep.split(".")[0].capitalize
 
+        villes.length.times do |i| 
+            @array_info.push([villes[i], emails[i], nom_dep])
         end 
+
         return @array_info
+    end 
+
+    def run
+        email_list = Array.new
+        #Scrapping du département de la Manche
+        email_list.push(create_list("http://www.annuaire-des-mairies.com/manche.html"))
+        email_list.push(create_list("http://www.annuaire-des-mairies.com/manche-2.html"))
+        email_list.push(create_list("http://www.annuaire-des-mairies.com/manche-3.html"))
+        #Scrapping du département de la Vienne
+        email_list.push(create_list("http://www.annuaire-des-mairies.com/vienne.html"))
+        #Scrapping du département de l'Ille-et-Vilaine
+        email_list.push(create_list("http://www.annuaire-des-mairies.com/ille-et-vilaine.html"))
+        email_list.push(create_list("http://www.annuaire-des-mairies.com/ille-et-vilaine-2.html"))
+
+        #### Create JSON file
+        # File.open("email.json","w") do |f|
+  #         f.write(email_list.flatten(1).to_json)
+  #         end 
+        @data = email_list
+        return @data
     end 
 
 end 
