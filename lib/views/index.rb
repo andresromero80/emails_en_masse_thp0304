@@ -13,16 +13,26 @@ class Index
 
 	def start
 		puts "Welcome in our google-agent program."
-		puts "You can use it for multiple purpose :"
-		puts "	To get email addresses from webpages."
-		puts "	To store data into spreadsheets."
-		puts "	To send emails."
-		puts "	To make twitter relaunch."
 		puts "Feel free to contact us at thp-google-agent.fr for any suggestion !"
+		puts "\n"
+		puts "You can use it for multiple purpose :"
+		puts "	Press 1	to get email addresses from webpages."
+		puts "	Press 2	to store data into spreadsheets."
+		puts "	Press 3	to send emails."
+		puts "	Press 4	to make twitter relaunch."
+		puts "Select an option :"
+
+		while 1
+			choice = gets.chomp
+			break if /\d/.match?(choice) && choice.to_i.between?(1, 4)
+			puts "Bad option, select again."
+		end
+
 	end
 
-	def call_add_to_db
-
+	def call_db
+		@db_manager.write([["test", "hello", "world"], ["test", "hello", "world"], ["test", "hello", "world"]])
+		@db_manager.csv_to_json(@db_manager.spreadsheet)
 	end
 
 	def call_follower
