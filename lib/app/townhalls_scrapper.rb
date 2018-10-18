@@ -11,7 +11,7 @@ class GetEmails
 
     def initialize (urlstring)
       @url_obj = urlstring
-      @list_hash = Hash.new
+      @array_info = Array.new
     end 
 
     def get_the_email_of_a_townhal_from_its_webpage (urlstring)
@@ -20,7 +20,7 @@ class GetEmails
     	list_string = list.to_s	
     	addrs = list_string.upcase.scan(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/)
     	addrs.map! {|email| email.downcase}
-    	addrs
+    	return addrs
     end 
     	
     def get_all_the_urls_of_val_doise_townhalls (urlstring)
@@ -46,20 +46,29 @@ class GetEmails
     def get_all_the_emails (array)
     	liste_emails = Array.new
     	array.length.times do |i|
-            # puts i
-            # p get_the_email_of_a_townhal_from_its_webpage(array[i])
+            #puts i
+            get_the_email_of_a_townhal_from_its_webpage(array[i])
     		liste_emails[i] = get_the_email_of_a_townhal_from_its_webpage(array[i])
-            rescue 
-                liste_emails[i] = " "
+            rescue #error opening the URL
+                liste_emails[i] = nil
     	end 
     	# array.length.times do |i|
-    		p liste_emails.flatten
+    		return liste_emails.flatten
     	# end 
     end 
 
+    #Method that creates a hash ville => email
     def create_list
+        villes = self.get_all_names(@url_obj)
+        emails = self.get_all_the_emails(self.get_all_the_urls_of_val_doise_townhalls(@url_obj))
+      # self.get_all_names(@url_obj).zip(self.get_all_the_emails(self.get_all_the_urls_of_val_doise_townhalls(@url_obj))).to_h
+        villes.length.times do |i|
+        list_hash = {:name => villes[i], :email => emails[i]}
+        
+        @array_info.push(list_hash)
 
-      self.get_all_names(@url_obj).zip(self.get_all_the_emails(self.get_all_the_urls_of_val_doise_townhalls(@url_obj))).to_h
+        end 
+        return @array_info
     end 
 
 end 
