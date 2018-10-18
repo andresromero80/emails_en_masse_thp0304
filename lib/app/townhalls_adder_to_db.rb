@@ -64,7 +64,7 @@ class DBManager
 			end
 		end
 
-		puts data
+		return data
 	end
 
 	def export_as(export_format, path)
