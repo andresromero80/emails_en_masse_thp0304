@@ -1,14 +1,20 @@
+require "pry"
+require 'json'
+require 'csv'
+
+
 $:.unshift File.expand_path("./../../app/", __FILE__)
 require 'townhalls_adder_to_db.rb'
+require 'townhalls_scrapper.rb'
 
 class Index
 	attr_accessor :db_manager, :follower_manager, :mailer_manager, :scrapping_manager
 
 	def initialize()
-		@db_manager = DBManager.new
+		# @db_manager = DBManager.new
 		# @follower_manager = FollowerManager.new
 		# @mailer_manager = MailerManager.new
-		# @scrapping_manager = ScrappingManager.new
+		@scrapping_manager = GetEmails.new
 	end
 
 	def start
@@ -44,6 +50,8 @@ class Index
 	end
 
 	def call_scrapper
-
+		print @scrapping_manager.run
 	end
 end
+
+# binding.pry

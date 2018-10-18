@@ -5,4 +5,6 @@ require 'index.rb'
 
 index = Index.new
 index.call_db
-# index.start
+
+index.start
+index.call_scrapper
