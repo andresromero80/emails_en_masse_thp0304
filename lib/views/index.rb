@@ -11,7 +11,7 @@ class Index
 	attr_accessor :db_manager, :follower_manager, :mailer_manager, :scrapping_manager
 
 	def initialize()
-		# @db_manager = DBManager.new
+		@db_manager = DBManager.new
 		# @follower_manager = FollowerManager.new
 		# @mailer_manager = MailerManager.new
 		@scrapping_manager = GetEmails.new
@@ -34,11 +34,13 @@ class Index
 			puts "Bad option, select again."
 		end
 
+		call_scrapper if choice.to_i == 1
+		call_follower if choice.to_i == 2
+		call_mailer if choice.to_i == 3
+
 	end
 
 	def call_db
-		@db_manager.write([["test", "hello", "world"], ["test", "hello", "world"], ["test", "hello", "world"]])
-		@db_manager.csv_to_json(@db_manager.spreadsheet)
 	end
 
 	def call_follower
@@ -50,7 +52,9 @@ class Index
 	end
 
 	def call_scrapper
-		print @scrapping_manager.run
+		data = @scrapping_manager.run
+		@db_manager = DBManager.new
+		@db_manager.write(data)
 	end
 end
 
