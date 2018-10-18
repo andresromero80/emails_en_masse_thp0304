@@ -14,8 +14,8 @@ class FollowerManager
     end
   end
 
-  def run
-    push_json
+  def run(emails)
+    push_json(emails)
     followers
   end
 
@@ -23,7 +23,7 @@ class FollowerManager
     @mairie = Array.new
     puts emails
     emails.each do |email|
-      @client.user_search("mairie #{email}").each do |element|#pull_json dans user_search()
+      @client.user_search("mairie #{email}").each do |element|
         @mairie << @client.user(element.id).screen_name
       end
     end
@@ -32,11 +32,7 @@ class FollowerManager
     end
   end
 
-  def pull_json
-     #Pour prendre les données du JSON
-     puts datas = JSON.parse(File.read("mairi.JSON"))
-  end
-
+  
  def followers
     @mairie.each do |screen_names|
     @client.follow("#{screen_names}")

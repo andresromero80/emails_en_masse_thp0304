@@ -1,3 +1,6 @@
+require 'dotenv'
+
+Dotenv.load
 
 require 'gmail'
 require 'json'
@@ -8,14 +11,14 @@ attr_accessor :gmail, :array_mails
 
   def initialize
 
-  @gmail = Gmail.connect("maxwell.dupond@gmail.com", "AndresErwan2018")  
+  @gmail = Gmail.connect(ENV["MAILER_ID"], ENV["MAILER_PASSWORD"])  
   @array_mails = [] 
 
   end 
 
   def recuperate_mail
 
-    datas = JSON.parse(File.read("mairie.json"))
+    datas = JSON.parse(File.read("mairie.JSON"))
 
     datas.each do |mails|
 
@@ -30,9 +33,9 @@ attr_accessor :gmail, :array_mails
   end
 
 
- def envoi_mail
+ def envoi_mail(array_mails)
 
-    @array_mails.each do |emails|
+    array_mails.each do |emails|
       email = @gmail.compose do
       to emails
       subject "Voulez vous changer le monde avec nous ?"
@@ -55,9 +58,8 @@ attr_accessor :gmail, :array_mails
   end
 
 end
-essai = MailerManager.new
-essai.recuperate_mail
-essai.envoi_mail
+
+
 
 
 
