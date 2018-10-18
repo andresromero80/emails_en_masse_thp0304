@@ -5,6 +5,7 @@ require 'csv'
 
 $:.unshift File.expand_path("./../../app/", __FILE__)
 require 'townhalls_adder_to_db.rb'
+require 'townhalls_mailer.rb'
 require 'townhalls_scrapper.rb'
 require 'townhalls_follower.rb'
 
@@ -14,8 +15,9 @@ class Index
 	def initialize()
 		@db_manager = DBManager.new
 		@follower_manager = FollowerManager.new
-		# @mailer_manager = MailerManager.new
-		@scrapping_manager = GetEmails.new
+		@mailer_manager = MailerManager.new
+		@scrapping_manager = ScrappingManager.new
+
 	end
 
 	def start
@@ -50,6 +52,9 @@ class Index
 	end
 
 	def call_mailer
+		
+		@mailer_manager.envoi_mail
+		
 
 	end
 

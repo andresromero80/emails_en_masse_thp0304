@@ -7,6 +7,7 @@ gem 'json'
 gem "nokogiri"
 gem 'google_drive'
 gem 'csv'
+gem 'gmail' 
 gem 'gem-release'
 gem 'coveralls'
 gem 'gmail_xoauth'
