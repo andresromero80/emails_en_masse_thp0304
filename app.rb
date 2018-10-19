@@ -1,10 +1,8 @@
-require 'bundler'
-require 'dotenv'
-Bundler.require
 $:.unshift File.expand_path("./../lib/views", __FILE__)
-require 'index.rb'
+require 'bundler'
+Bundler.require
+require 'dotenv'
 Dotenv.load
+require 'index.rb'
 index = Index.new
-# index.call_scrapper
-index.call_follower
-# index.call_mailer
+index.start
