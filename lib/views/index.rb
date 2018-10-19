@@ -91,20 +91,19 @@ class Index
 	def call_scrapper
 		urls_to_scrap = [
 											#Scrapping du département de la Manche
-					            "http://www.annuaire-des-mairies.com/manche.html",
-					            # "http://www.annuaire-des-mairies.com/manche-2.html",
-					            # "http://www.annuaire-des-mairies.com/manche-3.html",
+					            # "http://www.annuaire-des-mairies.com/manche.html",
+					            "http://www.annuaire-des-mairies.com/manche-2.html",
+					            "http://www.annuaire-des-mairies.com/manche-3.html",
 					            # #Scrapping du département de la Vienne
-					            # "http://www.annuaire-des-mairies.com/vienne.html",
+					            "http://www.annuaire-des-mairies.com/vienne.html",
 					            #Scrapping du département de l'Ille-et-Vilaine
-					            # "http://www.annuaire-des-mairies.com/ille-et-vilaine.html",
-					            "http://www.annuaire-des-mairies.com/ille-et-vilaine-2.html"
+					            "http://www.annuaire-des-mairies.com/ille-et-vilaine.html",
+					            # "http://www.annuaire-des-mairies.com/ille-et-vilaine-2.html"
 					        ]
     urls_to_scrap.each do | url |
     	data = @scrapping_manager.run(url)
     	puts "Enregistrement des données en provenance de #{url}."
     	sleep(2)
-    	@db_manager = DBManager.new
 			@db_manager.write(data)
 		end
 	end

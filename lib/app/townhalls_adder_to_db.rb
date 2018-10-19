@@ -1,8 +1,14 @@
+require 'fileutils'
+
 class DBManager
 	attr_accessor :session, :spreadsheet
 
 	def initialize
 		@session = GoogleDrive::Session.from_config("./config.json")
+		@spreadsheet = get_session.spreadsheet_by_title("thp-google-agent")
+		unless File.directory?('db')
+		  FileUtils.mkdir_p('db')
+		end
 	end
 
 	def get_session
@@ -10,8 +16,14 @@ class DBManager
 	end
 
 	def get_spreadsheet
+		begin
+			return @spreadsheet
+		rescue StandardError => e
+			puts e.class
+			puts e.message
+			@session = GoogleDrive::Session.from_config("./config.json")
 			@spreadsheet = get_session.spreadsheet_by_title("thp-google-agent")
-		return @spreadsheet
+		end
 	end
 
 	def get_worksheet
