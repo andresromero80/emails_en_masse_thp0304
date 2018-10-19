@@ -4,8 +4,10 @@ require 'json'
 Dotenv.load
 
 class FollowerManager
+  attr_accessor :handle_twitter
 
   def initialize
+    @handle_twitter = []
     @client = Twitter::REST::Client.new do |config|
       config.consumer_key        = ENV['TWITTER_API_KEY']
       config.consumer_secret     = ENV['TWITTER_API_SECRET']
@@ -14,40 +16,37 @@ class FollowerManager
     end
   end
 
-  def run(emails)
-    push_json(emails)
-    followers
-  end
-
   def push_json(emails)
-    @mairie = Array.new
-    puts emails
+    system "clear" or system "cls"
+    count = 0
     emails.each do |email|
-      @client.user_search("mairie #{email}").each do |element|
-        @mairie << @client.user(element.id).screen_name
+      if (count % 15 == 0 && count > 0)
+        puts ">> Our bot is collecting data >> Progression  >> #{count * 100 / emails.size}%" 
+      end
+
+      begin
+        @client.user_search("mairie #{email}").each do | element |
+          @handle_twitter << element.screen_name
+        end
+        count += 1
+      rescue StandardError => e
+        puts e.class
+        puts e.message
       end
     end
-    File.open("mairie.JSON","w") do |f|
-      f.write(@mairie.to_json)
+
+    return @handle_twitter
+  end
+
+ def follow_handles
+    @handle_twitter.each do | screen_name |
+      begin
+        puts "Following #{screen_name}"
+        @client.follow("#{screen_name}")
+      rescue StandardError => e
+        puts e.class
+        puts e.message
+      end
     end
   end
-
-  
- def followers
-    @mairie.each do |screen_names|
-    @client.follow("#{screen_names}")
- end
-  end
-
 end
-
-FollowerManager.new
-
-
- #Pour prendre les données du JSON
- # file = File.read('./email.JSON')
- # datas = JSON.parse(file)
- # datas.each do |names|
- #   ws [i, 1] = names["name"]
- #   i += 1
- # end
